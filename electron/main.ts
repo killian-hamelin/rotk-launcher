@@ -1207,12 +1207,28 @@ function createWindow(): BrowserWindow {
       preload: join(currentDirectory, "preload.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: true,
+      sandbox: false,
       webSecurity: true,
       allowRunningInsecureContent: false,
       spellcheck: false,
     },
   });
+  // TEMP: CrossOver diagnostic
+
+  window.webContents.openDevTools({ mode: "detach" });
+
+  window.webContents.on("console-message", (_event, level, message, line, sourceId) => {
+
+    startupLog.mark(
+
+      "renderer-console",
+
+      `level=${level} ${message} (${sourceId}:${line})`
+
+    );
+
+  });
+  
   window.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
   // loadFile() is the only initial navigation and its target is constructed by
   // the main process below. Register the deny-all guard after that navigation
