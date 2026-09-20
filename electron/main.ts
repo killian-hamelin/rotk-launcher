@@ -112,6 +112,9 @@ import {
 } from "./services/gameplay-patch.js";
 
 app.setName(APP_NAME);
+// CrossOver / Wine: force Electron to use software rendering.
+app.disableHardwareAcceleration();
+
 if (!app.isPackaged && process.env.ROTK_USER_DATA_DIR) {
   app.setPath("userData", resolve(process.env.ROTK_USER_DATA_DIR));
 } else {
